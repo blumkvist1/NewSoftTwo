@@ -1,4 +1,4 @@
-const { Course, Lesson } = require("../models/model");
+const { Course, Lesson, UserCourses } = require("../models/model");
 const ApiError = require("../error/ApiError");
 
 class CourseController {
@@ -9,7 +9,12 @@ class CourseController {
   }
 
   async getAll(req, res) {
-    const courses = await Course.findAll();
+    const { userId } = req.params;
+
+    const courses = await UserCourses.findAll({
+      where: { userId },
+      include: [{ model: Course }],
+    });
     return res.json(courses);
   }
 
