@@ -4,7 +4,8 @@
 /server/node_modules
 /.pnp
 .pnp.js
-/
+/server/База данных.drawio
+/prettierrc
 
 # testing
 /coverage
