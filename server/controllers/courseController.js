@@ -8,7 +8,7 @@ class CourseController {
     return res.json(course);
   }
 
-  async getAll(req, res) {
+  async getAllUserCourses(req, res) {
     const { userId } = req.params;
 
     const courses = await UserCourses.findAll({
