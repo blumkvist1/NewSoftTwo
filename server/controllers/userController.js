@@ -1,6 +1,7 @@
 const ApiError = require("../error/ApiError");
 const bcrypt = require("bcrypt");
 const { User, UserCourses } = require("../models/model");
+const sequelize = require("../db");
 const jwt = require("jsonwebtoken");
 
 const generateJwt = (id, email, role) => {
@@ -64,9 +65,15 @@ class UserController {
       ? res.json(user)
       : next(ApiError.badRequest("Пользователя не существует"));
   }
+
   async check(req, res, next) {
     const token = generateJwt(req.user.id, req.user.email, req.user.password);
     res.json({ token });
+  }
+
+  async getCountAllUsers() {
+    const count = await sequelize.query("SELECT count(*) FROM users;");
+    return count;
   }
 }
 
