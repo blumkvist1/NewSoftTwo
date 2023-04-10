@@ -1,5 +1,7 @@
 const ApiError = require("../error/ApiError");
-const { Lesson } = require("../models/model");
+const path = require("path")
+const uuid = require("uuid");
+const { Lesson, Answerhw } = require("../models/model");
 const courseController = require("./courseController");
 class LessonController {
   async create(req, res, next) {
@@ -39,7 +41,22 @@ class LessonController {
     }
     return res.json(lesson);
   }
+
   async delete(req, res) {}
+
+  //TODO create a true name for files
+  async uploadAnswerHomework(req, res, next) {
+    console.log(req)
+    // const {file} = req.files
+    // console.log(file)
+    // let fileName = uuid.v4(); // + `.${file.mimetype.split("/")[1]}`;
+    // file.mv(path.resolve(__dirname, "..", "static", fileName));
+
+    //const homeWork =  await Answerhw.create({answer: fileName, userId: 12, lessonId: 15})
+    // console.log(homeWork)
+    // return res.json(homeWork)
+    return true;
+  }
 }
 
 module.exports = new LessonController();
