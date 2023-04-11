@@ -9,7 +9,7 @@ router.post(
   checkRoleMiddleware("ADMIN"),
   courseController.create
 );
-router.get("/courses/:userId", courseController.getAll);
+router.get("/courses/:userId", courseController.getAllUserCourses);
 router.get("/:workname", courseController.getOne);
 router.use("/:workname", lessonRouter);
 

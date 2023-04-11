@@ -3,24 +3,26 @@ const { QueryTypes } = require("sequelize");
 const sequelize = require("../db");
 
 const ApiError = require("../error/ApiError");
+const userController = require("./userController");
 
 class AnaliticsController {
   async getCoursesAnalize(req, res) {
     const analize = await sequelize.query(
-      'select "courses"."id", "courses"."name", courses.workname, "users"."name", users.id, users.role from user_courses left join courses on user_courses."courseId" = courses.id left join users on user_courses."userId" = users.id;'
+      'SELECT courses.id, courses."name", courses."createdAt", courses."updatedAt", courses.workname, COUNT(*) AS users_count FROM user_courses LEFT JOIN courses ON courses.id = user_courses."courseId" GROUP BY courses.id;'
     );
-
+    const totalUsers = await userController.getCountAllUsers();
+    analize[0].map((item) => {
+      const popularity = (item.users_count / totalUsers[0][0].count) * 100;
+      item.popularity = popularity;
+    });
     return res.json(analize[0]);
   }
-  // select courses.id, courses.name, courses.workname, users.name, users.id, users.role from user_courses left join courses on user_courses."courseId" = courses.id left join users on user_courses."userId" = users.id;
 
   async getUsersAnalize(req, res) {
-    const { workname } = req.params;
-    const course = await Course.findOne({
-      where: { workname },
-      include: [{ model: Lesson }],
-    });
-    return res.json(course);
+    const analize = await sequelize.query(
+      'SELECT users.id, users."name", users."createdAt", users."role", users.email, users.lastname, COUNT(*) AS courses_count FROM user_courses LEFT JOIN users ON users.id = user_courses."userId" GROUP BY users.id;'
+    );
+    return res.json(analize[0]);
   }
 }
 
