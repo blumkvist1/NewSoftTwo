@@ -33,12 +33,15 @@ class LessonController {
     const courseWorkame = req.baseUrl.split("/")[2];
     const courseId = await courseController.getId(courseWorkame);
     const { number } = req.params;
-    const lesson = await Lesson.findOne({ where: { number, courseId } });
+    const lesson = await Lesson.findOne({
+      where: { number, courseId },
+    });
     if (!lesson) {
       return next(ApiError.badRequest("Такого урока не существует"));
     }
     return res.json(lesson);
   }
+
   async delete(req, res) {}
 }
 
