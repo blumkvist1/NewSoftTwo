@@ -55,6 +55,49 @@ const Homework = sequelize.define("homework", {
   reference: { type: DataTypes.TEXT, allowNull: false },
 });
 
+const Testing = sequelize.define("testing", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  discription: { type: DataTypes.TEXT },
+});
+
+const Task = sequelize.define("task", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  quest: { type: DataTypes.TEXT, allowNull: false },
+  answer_true: { type: DataTypes.TEXT, allowNull: false },
+  grade_max: { type: DataTypes.INTEGER, allowNull: false },
+  type: { type: DataTypes.STRING, allowNull: false },
+  option_answer: { type: DataTypes.ARRAY(DataTypes.STRING) },
+});
+
+const AnswerTask = sequelize.define("answer_task", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  answer: { type: DataTypes.TEXT },
+  grade: { type: DataTypes.INTEGER },
+});
+
+const ResultTesting = sequelize.define("result_testing", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  total_grade: { type: DataTypes.INTEGER, allowNull: false },
+});
+
+Lesson.hasOne(Testing);
+Testing.belongsTo(Lesson);
+
+Testing.hasMany(Task);
+Task.belongsTo(Testing);
+
+Task.hasMany(AnswerTask);
+AnswerTask.belongsTo(Task);
+
+User.hasMany(AnswerTask);
+AnswerTask.belongsTo(User);
+
+User.hasOne(ResultTesting);
+ResultTesting.belongsTo(User);
+
+Testing.hasMany(ResultTesting);
+ResultTesting.belongsTo(Testing);
+
 Course.hasMany(UserCourses);
 User.hasMany(UserCourses);
 
@@ -91,4 +134,8 @@ module.exports = {
   Question,
   Helpful_info,
   Homework,
+  AnswerTask,
+  Task,
+  Testing,
+  ResultTesting,
 };
