@@ -66,7 +66,7 @@ const Task = sequelize.define("task", {
   answer_true: { type: DataTypes.TEXT, allowNull: false },
   grade_max: { type: DataTypes.INTEGER, allowNull: false },
   type: { type: DataTypes.STRING, allowNull: false },
-  option_answer: { type: DataTypes.ARRAY(DataTypes.STRING) },
+  options_answer: { type: DataTypes.ARRAY(DataTypes.STRING) },
 });
 
 const AnswerTask = sequelize.define("answer_task", {
