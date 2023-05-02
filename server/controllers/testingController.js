@@ -12,11 +12,9 @@ class TestingController {
     const { tasks } = req.body;
     const { testingId } = req.params;
 
-    let createdTasks = [];
-    //TODO create response with tasks
     tasks.map(async (task) => {
       const { quest, answer_true, grade_max, type, options_answer } = task;
-      const createdTask = await Task.create({
+      await Task.create({
         quest,
         answer_true,
         grade_max,
@@ -24,10 +22,23 @@ class TestingController {
         options_answer,
         testingId,
       });
-      //console.log(createdTask.dataValues);
     });
 
-    return res.json({ createdTasks });
+    const createdTasks = await Task.findAll({
+      where: { testingId },
+    });
+
+    return res.json(createdTasks);
+  }
+
+  async getTestingWithTasks(req, res) {
+    const { lessonId } = req.params;
+
+    const testing = await Testing.findOne({
+      where: { lessonId },
+      include: { model: Task },
+    });
+    return res.json(testing);
   }
 }
 
