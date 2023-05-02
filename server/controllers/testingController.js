@@ -33,12 +33,11 @@ class TestingController {
 
   async getTestingWithTasks(req, res) {
     const { lessonId } = req.params;
-
     const testing = await Testing.findOne({
-      where: { lessonId },
+      where: { lessonId: lessonId },
       include: { model: Task },
     });
-    return res.json(testing);
+    return res.json({testing });
   }
 }
 
