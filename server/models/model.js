@@ -35,7 +35,8 @@ const Lesson = sequelize.define("lesson", {
 
 const Answerhw = sequelize.define("answerhw", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  answer: { type: DataTypes.STRING },
+  answer: { type: DataTypes.TEXT },
+  files: { type: DataTypes.ARRAY(DataTypes.STRING) },
 });
 
 const Question = sequelize.define("question", {
@@ -46,7 +47,7 @@ const Question = sequelize.define("question", {
 const Helpful_info = sequelize.define("helpful_info", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   discription: { type: DataTypes.TEXT },
-  reference: { type: DataTypes.TEXT, allowNull: false },
+  reference: { type: DataTypes.TEXT },
 });
 
 const Homework = sequelize.define("homework", {
@@ -89,7 +90,7 @@ Task.belongsTo(Testing);
 Task.hasMany(AnswerTask);
 AnswerTask.belongsTo(Task);
 
-User.hasMany(AnswerTask);
+User.hasOne(AnswerTask);
 AnswerTask.belongsTo(User);
 
 User.hasOne(ResultTesting);
@@ -107,7 +108,7 @@ UserCourses.belongsTo(Course);
 User.hasMany(Question);
 Question.belongsTo(User);
 
-User.hasMany(Answerhw);
+User.hasOne(Answerhw);
 Answerhw.belongsTo(User);
 
 Course.hasMany(Lesson);
@@ -116,7 +117,7 @@ Lesson.belongsTo(Course);
 Lesson.hasMany(Question);
 Question.belongsTo(Lesson);
 
-Lesson.hasOne(Answerhw);
+Lesson.hasMany(Answerhw);
 Answerhw.belongsTo(Lesson);
 
 Lesson.hasMany(Helpful_info);
