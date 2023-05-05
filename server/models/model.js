@@ -59,7 +59,7 @@ const Homework = sequelize.define("homework", {
 const Testing = sequelize.define("testing", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   discription: { type: DataTypes.TEXT },
-  show_results: { type: DataTypes.BOOLEAN, defaultValue: false}
+  show_results: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const Task = sequelize.define("task", {
@@ -79,7 +79,7 @@ const AnswerTask = sequelize.define("answer_task", {
 
 const ResultTesting = sequelize.define("result_testing", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  total_grade: { type: DataTypes.INTEGER, allowNull: false },
+  total_grade: { type: DataTypes.INTEGER },
 });
 
 Lesson.hasOne(Testing);
@@ -99,6 +99,9 @@ ResultTesting.belongsTo(User);
 
 Testing.hasMany(ResultTesting);
 ResultTesting.belongsTo(Testing);
+
+ResultTesting.hasMany(AnswerTask);
+AnswerTask.belongsTo(ResultTesting);
 
 Course.hasMany(UserCourses);
 User.hasMany(UserCourses);
