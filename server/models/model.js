@@ -59,6 +59,7 @@ const Homework = sequelize.define("homework", {
 const Testing = sequelize.define("testing", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   discription: { type: DataTypes.TEXT },
+  show_results: { type: DataTypes.BOOLEAN, defaultValue: false}
 });
 
 const Task = sequelize.define("task", {

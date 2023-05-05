@@ -17,5 +17,6 @@ router.post(
   "/:lessonId/answer_homework/photos/:userId",
   homeworkController.addPhoto
 );
+//TODO: create delete photo
 
 module.exports = router;
