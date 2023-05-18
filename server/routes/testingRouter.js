@@ -12,10 +12,15 @@ router.post(
 router.get(
   "/:testingId/results_testing",
   testingController.getAllResultsTesting
-); // TODO
-router.get("/:testingId/result_testing", testingController.getOneResultTesting); // TODO
-
-//TODO: получение результатов конкретного узера (возможно отдавать массив тасков узера)
-// TODO: получение конкретного таска конкретного узера
+);
+router.get(
+  "/:testingId/result_testing",
+  testingController.getOneResultTestingByUser
+);
+router.get("/task/:taskId/results_task", testingController.getResultsOnTask);
+router.get(
+  "/task/:taskId/result_task",
+  testingController.getResultOnTaskByUser
+);
 
 module.exports = router;

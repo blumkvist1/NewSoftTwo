@@ -47,7 +47,6 @@ class TestingController {
     return res.json({ testing });
   }
 
-  //TODO: fix error  original: error: столбец "resultTestingId" не существует
   async createAnswersToTasks(req, res, next) {
     try {
       const { testingId, userId } = req.params;
@@ -56,8 +55,6 @@ class TestingController {
       let [testingResult, created] = await ResultTesting.findOrCreate({
         where: { userId, testingId },
       });
-
-      console.log(testingResult, created);
 
       if (created) {
         results.map(async (result) => {
@@ -74,13 +71,12 @@ class TestingController {
               result.grade = 0;
             }
           }
-          console.log(testingResult.id);
           await AnswerTask.create({
             taskId,
             answer,
             userId,
             grade: result.grade,
-            result_testingId: testingResult.id,
+            resultTestingId: testingResult.id,
           });
         });
 
@@ -123,8 +119,7 @@ class TestingController {
     return res.json(results);
   }
 
-  //TODO: need to edit
-  async getOneResultTesting(req, res) {
+  async getOneResultTestingByUser(req, res) {
     const { testingId } = req.params;
     const { userId } = req.body;
 
@@ -133,25 +128,54 @@ class TestingController {
       attributes: ["id"],
     });
 
+    const user = await User.findOne({
+      where: { id: userId },
+      attributes: ["id", "name", "lastname", "email"],
+    });
+
     let tasksId = tasks.map((task) => task.id);
 
     const results = await ResultTesting.findAll({
       where: { testingId, userId },
       include: {
-        model: User,
-        attributes: ["name", "lastname", "email"],
-        include: {
-          model: AnswerTask,
-          where: {
-            taskId: {
-              [Op.in]: [...tasksId],
-            },
+        model: AnswerTask,
+        where: {
+          userId,
+          taskId: {
+            [Op.in]: [...tasksId],
           },
         },
       },
     });
 
+    return res.json({ results, user });
+  }
+
+  async getResultsOnTask(req, res) {
+    const { taskId } = req.params;
+
+    const results = await AnswerTask.findAll({
+      where: { taskId },
+      include: {
+        model: User,
+        attributes: ["id", "name", "lastname", "email"],
+      },
+    });
     return res.json(results);
+  }
+
+  async getResultOnTaskByUser(req, res) {
+    const { taskId } = req.params;
+    const { userId } = req.body;
+
+    const result = await AnswerTask.findOne({
+      where: { taskId, userId },
+      include: {
+        model: User,
+        attributes: ["id", "name", "lastname", "email"],
+      },
+    });
+    return res.json(result);
   }
 }
 
