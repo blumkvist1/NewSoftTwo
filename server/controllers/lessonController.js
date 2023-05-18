@@ -6,7 +6,13 @@ class LessonController {
     try {
       const courseWorkame = req.baseUrl.split("/")[2];
       const courseId = await courseController.getId(courseWorkame);
-      const { name, number, video, presentation, datetime } = req.body;
+      const { name, number, presentation, datetime } = req.body;
+      let { video } = req.body;
+
+      video = video.includes("youtu.be")
+        ? video.replace("youtu.be", "www.youtube.com/embed")
+        : video;
+
       const lesson = await Lesson.create({
         name,
         number,
